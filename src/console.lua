@@ -325,7 +325,7 @@ function console:init(conf)
 				return 1, "Variable doesn't exist"
 			end
 		end,
-		_getvar_desc = "Get a global variable. Arguments: var name.",
+		_getvar_desc = "Get a global variable. Arguments: var_name.",
 		echovar = function(args)
 			if _G[args[1]] ~= nil then
 				local var = _G[args[1]]
@@ -335,7 +335,7 @@ function console:init(conf)
 				return 1, "Variable doesn't exist"
 			end
 		end,
-		_echovar_desc = "Print a variable to the console. Similar to getvar. Arguments: var name.",
+		_echovar_desc = "Print a variable to the console. Similar to getvar. Arguments: var_name.",
 		calc = function(args)
 			local forbidden_terms = {
 				"while",
@@ -432,7 +432,7 @@ function console:init(conf)
 				return 1, "Expected set, get or list as first argument"
 			end
 		end,
-		_conf_desc = "Set/get a console config parameter. You can also list the current configuration. Arguments: set/get.list, param[, val]",
+		_conf_desc = "Set/get a console config parameter. You can also list the current configuration. Arguments: set/get/list, param[, val].",
 		env = function(args)
 			---@alias setget string
 			---| "set" set value
