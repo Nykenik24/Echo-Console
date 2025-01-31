@@ -7,7 +7,7 @@ function love.load()
 	local font = love.graphics.newFont("font.ttf")
 	love.graphics.setFont(font)
 
-	-- love.window.setMode(1280, 720)
+	love.window.setMode(1280, 720)
 
 	CONSOLE:setVarInEnv(CONSOLE, "console")
 	love.graphics.setDefaultFilter("nearest", "nearest")

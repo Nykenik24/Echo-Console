@@ -3,3 +3,6 @@
 
  ## TODO:
  - Better README.md
+
+## Credits:
+- Demo font: https://github.com/eliheuer/caskaydia-cove
