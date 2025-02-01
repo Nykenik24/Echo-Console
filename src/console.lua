@@ -227,6 +227,7 @@ function console:init(conf)
 		bg_color = conf.bg_color or { 0, 0, 0 },
 		fg_opacity = conf.fg_opacity or 1,
 		show_tips = conf.show_tips or true,
+		show_dir_in_prompt = conf.show_dir_in_prompt or true,
 	}
 
 	self.COMMANDS = {
@@ -759,8 +760,15 @@ function console:draw()
 			end
 			current_i = i + 1
 		end
+		local prompt
+		if not self.conf.show_dir_in_prompt then
+			prompt = ("%s > "):format(self.TIME)
+		else
+			prompt = ("%s %s > "):format(self.TIME, love.filesystem.getWorkingDirectory())
+		end
+
 		love.graphics.print(
-			("%s > %s"):format(self.TIME, self.CURRENT_TEXT),
+			("%s%s"):format(prompt, self.CURRENT_TEXT),
 			20,
 			current_i * 25,
 			0,
