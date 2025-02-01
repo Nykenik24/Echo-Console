@@ -183,6 +183,9 @@ function console:init(conf)
 		type = type,
 		tonumber = tonumber,
 		tostring = tostring,
+		pairs = pairs,
+		ipairs = ipairs,
+		pcall = pcall,
 	}
 	love.graphics.setBackgroundColor(0.25, 0.25, 0.75)
 
@@ -317,9 +320,18 @@ function console:init(conf)
 				return 1, "Variable name was not given"
 			end
 
-			if _G[args[1]] ~= nil then
-				local var = _G[args[1]]
-				PrintToConsole(('Variable "%s" is %s and has type "%s"'):format(args[1], var, type(var)))
+			local var_name = args[1]
+
+			if var_name == "all" then
+				for name, var in pairs(_G) do
+					PrintToConsole(("%s: %s\n"):format(name, var), console.COLORS.light_red, "GLOBAL VAR")
+				end
+				return
+			end
+
+			if _G[var_name] ~= nil then
+				local var = _G[var_name]
+				PrintToConsole(('Variable "%s" is %s and has type "%s"'):format(var_name, var, type(var)))
 				return var
 			else
 				return 1, "Variable doesn't exist"
@@ -674,15 +686,16 @@ function console:draw()
 
 		love.graphics.setColor(1, 1, 1, tonumber(self.conf.fg_opacity) or 1)
 
-		local line_limit = love.graphics.getWidth() - 80
+		-- local line_limit = love.graphics.getWidth() - 80
 
 		local current_i = 0
 		for i, v in ipairs(self.HISTORY) do
+			local x, y = 20, i * 25 / self.conf.text_size
 			if v.isInput then
 				love.graphics.print(
 					("USER at %s > %s"):format(v.time or "00:00:00", v.text),
-					20,
-					i * 25,
+					x,
+					y,
 					0,
 					self.conf.text_size,
 					self.conf.text_size
@@ -692,8 +705,8 @@ function console:draw()
 				if not v.custom_prompt then
 					love.graphics.print(
 						("%s >> %s"):format(v.type or v.time or "00:00:00", v.text),
-						20,
-						i * 25,
+						x,
+						y,
 						0,
 						self.conf.text_size,
 						self.conf.text_size
@@ -701,8 +714,8 @@ function console:draw()
 				else
 					love.graphics.print(
 						("%s %s %s"):format(v.type or v.time or "00:00:00", v.custom_prompt, v.text),
-						20,
-						i * 25,
+						x,
+						y,
 						0,
 						self.conf.text_size,
 						self.conf.text_size
@@ -767,6 +780,8 @@ function console:keypressed(k)
 					self.CURRENT_TEXT = last_input.text
 				end
 			end
+		elseif Pressed("tab") then
+			self.CURRENT_TEXT = self.CURRENT_TEXT .. "\t"
 		end
 	end
 end
