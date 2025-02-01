@@ -47,6 +47,13 @@ local console = {
 			self.env[name] = nil
 		end
 	end,
+	---Returns a variable from the enviroment.
+	---@param self table
+	---@param name string
+	---@return any|nil Variable
+	getEnvVar = function(self, name)
+		return self.env[name] or nil
+	end,
 }
 
 local function SplitString(str, sep)
@@ -186,6 +193,9 @@ function console:init(conf)
 		pairs = pairs,
 		ipairs = ipairs,
 		pcall = pcall,
+		math = math,
+		string = string,
+		table = table,
 	}
 	love.graphics.setBackgroundColor(0.25, 0.25, 0.75)
 
@@ -253,8 +263,12 @@ function console:init(conf)
 			local chunk, error_msg = load(code, "user code", "bt", self.env)
 
 			if chunk and not error_msg then
-				chunk()
-				return 0
+				local no_errors, returned = pcall(chunk)
+				if no_errors then
+					return 0
+				else
+					return 1, returned
+				end
 			else
 				return 1, error_msg
 			end
@@ -398,10 +412,24 @@ function console:init(conf)
 			end
 
 			if cmd then
-				self.COMMANDS[cmd_name] = function(cmd_args)
-					cmd()(cmd_args)
+				local no_errors, returned = pcall(cmd)
+				if no_errors then
+					self.COMMANDS[cmd_name] = function(cmd_args)
+						for i in ipairs(cmd_args) do
+							cmd_args[i] = StringToAny(cmd_args[i])
+						end
+
+						local errors, msg = pcall(cmd(), cmd_args)
+						if not errors then
+							PrintToConsole(msg, console.COLORS.red, "ERROR")
+						end
+					end
+
+					self.COMMANDS[("_%s_desc"):format(cmd_name)] = "User defined command."
+					return 0
+				else
+					return 1, returned
 				end
-				return 0
 			else
 				return 1, error_msg
 			end
@@ -650,7 +678,11 @@ function console:init(conf)
 				if cmd:sub(1, 1) ~= "_" then
 					local cmd_name, cmd_desc = getDesc(cmd)
 					if cmd_name and cmd_desc then
-						PrintToConsole(("%s - %s"):format(cmd_name, cmd_desc), self.COLORS.light_green, "HELP")
+						if cmd_desc == "User defined command." then
+							PrintToConsole(("%s - %s"):format(cmd_name, cmd_desc), self.COLORS.light_blue, "HELP")
+						else
+							PrintToConsole(("%s - %s"):format(cmd_name, cmd_desc), self.COLORS.light_green, "HELP")
+						end
 					end
 					cmd_count = cmd_count + 1
 				end
@@ -668,14 +700,16 @@ function console:init(conf)
 
 	if self.conf.show_tips then
 		PrintToConsole('type "help" to get all commands', self.COLORS.cyan, "TIP")
+		PrintToConsole('To disable tips, use "conf set show_tips false"', console.COLORS.cyan, "TIP")
 	end
 end
 
 function console:update()
-	self.TIME = os.date("%H:%M:%S")
+	self.TIME = os.date("%H:%M:%S") or "00:00:00"
 	if #self.HISTORY > love.graphics.getHeight() / 25 - 2 then
 		table.remove(self.HISTORY, 1)
 	end
+	return self.opened
 end
 
 function console:draw()
@@ -793,5 +827,52 @@ end
 function console.cmd(cmd)
 	ExecEntry(cmd)
 end
+
+console.utils = {
+	---Make a global variable be an enviroment variable.
+	---@param global_var string Global variable name
+	---@param env_var string Enviroment variable name
+	---@return any|nil Variable `nil` if variable doesn't exist.
+	linkGlobalToEnvVariable = function(global_var, env_var)
+		local env = console.env
+
+		if env[env_var] ~= nil then
+			_G[global_var] = env[env_var]
+			return env[env_var]
+		else
+			return nil
+		end
+	end,
+	---Make an enviroment variable be a global variable.
+	---@param global_var string Global variable name
+	---@param env_var string Enviroment variable name
+	---@return any|nil Variable `nil` if variable doesn't exist or can't be changed.
+	linkEnvToGlobalVariable = function(global_var, env_var)
+		local env = console.env
+
+		if env_var == "print" or env_var == "require" then
+			return nil
+		end
+
+		if _G[global_var] then
+			env[env_var] = _G[global_var]
+			return _G[global_var]
+		else
+			return nil
+		end
+	end,
+	---Make the env contain all global variables.
+	---
+	---Excludes `print` because of `PrintToConsole` and `require` because of the safe require.
+	---@return boolean Succes
+	syncGlobalsToEnv = function()
+		for name, var in pairs(_G) do
+			if name ~= "print" or name ~= "require" then
+				console.env[name] = var
+			end
+		end
+		return true
+	end,
+}
 
 return console
