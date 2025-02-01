@@ -12,7 +12,7 @@ function love.load()
 	CONSOLE:setVarInEnv(CONSOLE, "console")
 	love.graphics.setDefaultFilter("nearest", "nearest")
 
-	RECTANGLES = {}
+	RECTANGLES = CONSOLE:setVarInEnv({}, "RECTANGLES")
 
 	CONSOLE:setVarInEnv(love, "love")
 
@@ -44,6 +44,7 @@ end
 
 function love.update(dt)
 	CONSOLE.utils.linkGlobalToEnvVariable("PAUSED", "PAUSED")
+	CONSOLE.utils.linkGlobalToEnvVariable("RECTANGLES", "RECTANGLES")
 
 	if not PAUSED then
 		for _, rect in ipairs(RECTANGLES) do
