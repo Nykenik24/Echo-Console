@@ -27,6 +27,13 @@ local console = {
 		end
 		self.COMMANDS.conf({ [1] = conf_type, [2] = conf_param, [3] = new_val })
 	end,
+	---Create a new alias.
+	---@param self table
+	---@param name string Alias name
+	---@param command string Command name
+	alias = function(self, name, command)
+		self.COMMANDS.alias({ [1] = name, [2] = command })
+	end,
 	env = {},
 	---Set a var inside the enviroment.
 	---@param self table
