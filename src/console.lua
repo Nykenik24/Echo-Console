@@ -728,7 +728,11 @@ function console:draw()
 			local x, y = 20, i * 25 / self.conf.text_size
 			if v.isInput then
 				love.graphics.print(
-					("USER at %s > %s"):format(v.time or "00:00:00", v.text),
+					("%s at %s > %s"):format(
+						os.getenv("USER") or os.getenv("USERNAME") or "USER",
+						v.time or "00:00:00",
+						v.text
+					),
 					x,
 					y,
 					0,
