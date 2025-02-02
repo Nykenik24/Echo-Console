@@ -237,6 +237,9 @@ function console:init(conf)
 			love.event.quit(0)
 		end,
 		_exit_desc = "Quit.",
+		_quit_alias = function()
+			love.event.quit(0)
+		end,
 		restart = function()
 			love.event.quit("restart")
 		end,
