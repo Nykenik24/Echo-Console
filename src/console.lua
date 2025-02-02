@@ -507,12 +507,15 @@ function console:init(conf)
 				end
 
 				if console.env[var_name] ~= nil then
-					return 0,
-						('Variable "%s" is %s and has type %s'):format(
+					PrintToConsole(
+						('Variable "%s" is %s and has type "%s"'):format(
 							var_name,
 							console.env[var_name],
 							type(console.env[var_name])
 						)
+					)
+
+					return 0
 				else
 					return 1, "Variable doesn't exist inside env"
 				end
