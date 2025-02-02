@@ -100,6 +100,14 @@ function SpawnRect(x, y)
 end
 
 function DespawnRect(rect_index)
+	if rect_index == "all" then
+		for i = #RECTANGLES, 1, -1 do
+			table.remove(RECTANGLES, i)
+		end
+		CONSOLE.log("Despawned all rectangles")
+		return
+	end
+
 	table.remove(RECTANGLES, rect_index)
 	CONSOLE.log("Despawned rectangle " .. tostring(rect_index))
 end
