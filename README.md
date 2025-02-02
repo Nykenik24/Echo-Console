@@ -7,7 +7,8 @@ When using the `lua` command, or any other that runs lua code, the code is calle
 
 ### Easy implementation
 Implementing Echo Console in your project is as easy as writing **6 lines of code** into your `main.lua`:
-![Speedrun](./media/implement_speedrun.mov)
+
+https://github.com/Nykenik24/Echo-Console/blob/main/media/implement_speedrun.mov
 
 ## Installation
 First, clone or add as a submodule:
@@ -58,6 +59,7 @@ After opening the console, you will see three things:
 
 - Two tips, one saying how to get all commands and one saying how to disable tips.
 - The "command prompt", the way you execute commands.
+
 ![Tips and command prompt](./media/usage1.png)
 
 Here you will want to type `help`, as the first tip says, to know what each command does. If you want to know about an specific command, type `help (command)`.
@@ -89,12 +91,14 @@ end
 -- Other code...
 ```
 Open the terminal and type `getvar TEST_VAR` and `env get TEST_VAR`:
+
 ![Example](./media/usage2.png)
 
 
 # More
 ## Demo
 The demo consists of `main.lua` and `conf.lua`, to run it use `love`.
+
 ![Demo](./media/demo.png)
 
 ### Demo commands
