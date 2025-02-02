@@ -197,7 +197,6 @@ function console:init(conf)
 		string = string,
 		table = table,
 	}
-	love.graphics.setBackgroundColor(0.25, 0.25, 0.75)
 
 	math.randomseed(os.time())
 	math.random() -- pop first number, as it will always be the same
