@@ -6,9 +6,10 @@ Echo Console emulates a terminal inside your love2d game. It includes various us
 When using the `lua` command, or any other that runs lua code, the code is called with `pcall` and has a custom enviroment *(that can be modified with the `env` command)* so you errors in the code don't affect your game.
 
 ### Easy implementation
-Implementing Echo Console in your project is as easy as writing **6 lines of code** into your `main.lua`:
+Implementing Echo Console in your project is as easy as writing **6 lines of code** into your `main.lua` *(see [Post installation](#post-installation))*
 
-https://github.com/Nykenik24/Echo-Console/blob/main/media/implement_speedrun.mov
+### Clean codespace
+Echo Console doesn't create any unwanted global variables.
 
 ## Installation
 First, clone or add as a submodule:
