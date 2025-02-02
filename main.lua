@@ -4,6 +4,8 @@ function love.load()
 	CONSOLE = require("src.console")
 	CONSOLE:init()
 
+	love.graphics.setBackgroundColor(0.25, 0.25, 0.75)
+
 	local font = love.graphics.newFont("font.ttf")
 	love.graphics.setFont(font)
 
