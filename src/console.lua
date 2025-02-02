@@ -196,6 +196,7 @@ function console:init(conf)
 		math = math,
 		string = string,
 		table = table,
+		error = error,
 	}
 
 	math.randomseed(os.time())
