@@ -28,11 +28,13 @@ function love.load()
 	CONSOLE:setVarInEnv(ChangeRectangleSpeed, "ChangeRectSpeed")
 	CONSOLE.cmd("func chspeed ChangeRectSpeed(args[1])")
 
+	CONSOLE:setVarInEnv(DemoHelp, "DemoHelp")
+	CONSOLE.cmd("func demohelp DemoHelp()")
+
 	RECT_SPEED = CONSOLE:setVarInEnv(200, "RECT_SPEED")
 
 	PAUSED = CONSOLE:setVarInEnv(true, "PAUSED")
-	CONSOLE.cmd("func pause PAUSED = true")
-	CONSOLE.cmd("func resume PAUSED = false")
+	CONSOLE.cmd("func togglepause PAUSED = not PAUSED")
 
 	for _ = 1, 5 do
 		CONSOLE.cmd("randomspawn")
@@ -92,7 +94,7 @@ function SpawnRect(x, y)
 		h = math.random(25, 100),
 		color = { r = math.random(0, 1), g = math.random(0, 1), b = math.random(0, 1) },
 	})
-	CONSOLE.log("Spawned rectangle")
+	CONSOLE.log("Spawned rectangle with index " .. tostring(#RECTANGLES))
 end
 
 function DespawnRect(rect_index)
@@ -102,4 +104,18 @@ end
 
 function ChangeRectangleSpeed(speed)
 	RECT_SPEED = speed
+end
+
+function DemoHelp()
+	local lines = {
+		"Console commands:",
+		"spawn - Spawn a rectangle at x (first arg), y (second arg).",
+		"despawn - Despawns rectangle with index i (first arg).",
+		"randomspawn - Spawn a rectangle at random position.",
+		"chspeed - Changes rectangle speed.",
+		"togglepause - Pauses/unpauses the rectangles.",
+	}
+	for _, line in ipairs(lines) do
+		CONSOLE.cmd(("msg help %s"):format(line))
+	end
 end
