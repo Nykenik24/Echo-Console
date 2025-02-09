@@ -1,4 +1,5 @@
 # Echo Console
+
 Echo Console emulates a terminal inside your love2d game. It includes various useful commands, like `getvar` and `setvar`, `lua`, `love`, etc.
 
 ## Features
@@ -113,5 +114,3 @@ The demo has some unique commands included:
 
 ## Credits:
 - Demo font: https://github.com/eliheuer/caskaydia-cove
- Configuration
-To open echo, press ``
